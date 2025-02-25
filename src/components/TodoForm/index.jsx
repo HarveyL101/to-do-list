@@ -1,17 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useState, useActionState } from "react";
 
 export const TodoForm = ({ formAction, initialData }) => {
   const [formState, action] = useActionState(formAction, {
     errors: {},
   });
 
+  const [priority, setPriority] = useState("undefined");
+  const priorities = ["No Priority", "Low-Priority", "Medium-Priority", "High-Priority"];
+
+  const cyclePriority = () => {
+    const currentIndex = priorities.indexOf(priority);
+    const nextIndex = (currentIndex + 1) % priorities.length;
+
+    setPriority(priorities[nextIndex]);
+  }
+
   return (
     <>
       <h1>{initialData.title ? "Update" : "Create"} Post</h1>
       <form action={action}>
+        <section>
+          <button htmlFor="priority" type="button" onClick={ cyclePriority }>{ priority }</button>
+        </section>
         <section>
           <label htmlFor="title">Title</label>
           <input
